@@ -1,0 +1,32 @@
+pragma solidity ^0.4.2;
+
+contract PowerInfo {
+    string public _PoweID;
+    string public customer_id;
+    string public provider_id;
+    string public power_amount;
+    string public power_per_kw;
+    string public payable_amount;
+    string public power_plant_type;
+	  
+	
+    function PowerInfo () public {
+        _PoweID = "None";
+        customer_id = "None";
+        provider_id = "None";
+        power_amount = "None";
+        power_per_kw = "None";
+        payable_amount = "None";
+        power_plant_type = "None";
+    }
+
+    function setCandidate (string _poweID, string _customerid, string _provider_id, string _power_amount, string _power_per_kw, string _payable_amount, string _power_plant_type) public {
+        _PoweID = _poweID;
+        customer_id = _customerid; 
+        provider_id = _provider_id;
+        power_amount = _power_amount;
+        power_per_kw = _power_per_kw;
+        payable_amount = _payable_amount;
+        power_plant_type = _power_plant_type;
+    }
+}

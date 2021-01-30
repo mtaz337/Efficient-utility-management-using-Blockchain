@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Blockchain</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+	<div id="result">
+	</div>
+     <iframe class="mp"style=" " id="myIframe" src="http://localhost/power/Buy.php" width="100%"  height="800px" frameborder="0" marginwidth="0" marginheight="0"></iframe>
+    </div>
+  </div>
+</div
+</body> 
+
+<script src="web3.min.js"></script>
+<script>
+ 
+function myFunction() {
+alert('0');
+  var xxxx = document.getElementById("customer_id").value;
+
+  alert(xxxx);
+}
+
+
+  // Ajax check
+	window.setInterval(function(){
+	   checks();
+	}, 2000);
+ 
+ 
+	 function checks(){
+		 
+		 
+		 var phn_code='vv';
+				$.ajax({
+				type: "POST",
+				url: "http://localhost/power/api_sharedata.php?id=1",
+				data: {phn_code:phn_code},
+				dataType: "TEXT",
+				success: function(data) {
+					var txt = data;
+					var nameArr = txt.split(',');
+					var _PoweID=nameArr[0];
+					var customer_id=nameArr[1];
+					var provider_id=nameArr[2];
+					var power_amount=nameArr[3];
+					var power_per_kw=nameArr[4];
+					var payable_amount=nameArr[5];
+					var plant_type=nameArr[6];
+					  
+					
+
+
+      // Initialize Web3
+      if (typeof web3 !== 'undefined') {
+        web3 = new Web3(web3.currentProvider);
+      } else {
+        web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+      }
+
+      // Set Account
+      web3.eth.defaultAccount = web3.eth.accounts[0];
+
+ // Set Contract Abi
+ var contractAbi =[
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "_poweID",
+				"type": "string"
+			},
+			{
+				"name": "_customerid",
+				"type": "string"
+			},
+			{
+				"name": "_provider_id",
+				"type": "string"
+			},
+			{
+				"name": "_power_amount",
+				"type": "string"
+			},
+			{
+				"name": "_power_per_kw",
+				"type": "string"
+			},
+			{
+				"name": "_payable_amount",
+				"type": "string"
+			},
+			{
+				"name": "_power_plant_type",
+				"type": "string"
+			}
+		],
+		"name": "setCandidate",
+		"outputs": [],
+		"payable": false,
+		"type": "function",
+		"stateMutability": "nonpayable"
+	},
+	{
+		"inputs": [],
+		"type": "constructor",
+		"payable": true,
+		"stateMutability": "payable"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "_PoweID",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"type": "function",
+		"stateMutability": "view"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "customer_id",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"type": "function",
+		"stateMutability": "view"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "payable_amount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"type": "function",
+		"stateMutability": "view"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "power_amount",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"type": "function",
+		"stateMutability": "view"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "power_per_kw",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"type": "function",
+		"stateMutability": "view"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "power_plant_type",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"type": "function",
+		"stateMutability": "view"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "provider_id",
+		"outputs": [
+			{
+				"name": "",
+				"type": "string"
+			}
+		],
+		"payable": false,
+		"type": "function",
+		"stateMutability": "view"
+	}
+];
+	  
+	    // Set Contract Address
+      var contractAddress = '0xd8b934580fcE35a11B58C6D73aDeE468a2833fa8'; // Add Your Contract address here!!!
+
+      // Set the Contract
+      var contract = web3.eth.contract(contractAbi).at(contractAddress);
+ 
+ 
+		
+		if(_PoweID != '')
+		{ 	
+			//var capacityValue = $('select.operations-supplier').find(':selected').attr('data-capacity');
+			var txhash=contract.setCandidate(_PoweID, customer_id, provider_id, power_amount, power_per_kw, payable_amount, plant_type);
+			var myJSON = JSON.stringify(contract);
+			alert(myJSON);
+			
+			//save
+			
+			var phn_code=_PoweID;
+							$.ajax({
+				type: "POST",
+				url: "http://localhost/power/api_sharedata.php?id="+_PoweID,
+				data: {myJSON:myJSON,phn_code:phn_code,txhash:txhash},
+				dataType: "TEXT",
+				success: function(data) {
+					var txt = data;		 
+					_PoweID='';
+				},
+				error: function(err) {
+					alert(err);
+				}
+	 }); 
+			
+			
+			
+			
+			
+			
+			
+			
+	 	} 
+        
+					
+					  
+					  
+					  
+				},
+				error: function(err) {
+					alert(err);
+				}
+	 });   }
+
+
+      
+ 
+</script>
+</html>
+	
